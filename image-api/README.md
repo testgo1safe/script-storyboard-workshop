@@ -18,7 +18,7 @@
 ## 安装
 
 ```powershell
-cd E:\aippt\gpt-5.6-instruct\chatgpt-web-api
+cd C:\path\to\chatgpt-web-api
 python -m pip install -r requirements.txt
 python -m playwright install chromium
 ```

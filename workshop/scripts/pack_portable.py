@@ -7,10 +7,10 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-IMAGE_SRC = Path(r"E:\aippt\gpt-5.6-instruct\chatgpt-web-api")
-VIDEO_ENV = Path(r"E:\VIDeO") / ".env"
-BUNDLE = Path(r"D:\剧本工坊便携包")
-ZIP_PATH = Path(r"D:\剧本工坊便携包.zip")
+IMAGE_SRC = Path(r"C:\path\to\chatgpt-web-api")
+VIDEO_ENV = Path(r"C:\path\to\video") / ".env"
+BUNDLE = Path(r"C:\path\to\portable_bundle")
+ZIP_PATH = Path(r"C:\path\to\portable_bundle.zip")
 STARTERS = ROOT / "scripts" / "portable"
 
 WORKSHOP_SKIP_DIRS = {

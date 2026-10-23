@@ -223,7 +223,7 @@ Authorization: Bearer local-dev-key
 ```json
 {
   "prompt": "把这张图画成卡通风格",
-  "reference_image_path": "E:\\refs\\input.png"
+  "reference_image_path": "C:\\path\\to\\input.png"
 }
 ```
 
@@ -247,8 +247,8 @@ Authorization: Bearer local-dev-key
   "created": 1787626452,
   "data": [
     {
-      "url": "file:///E:/aippt/gpt-5.6-instruct/chatgpt-web-api/output/image_1787626452.png",
-      "local_path": "E:\\aippt\\gpt-5.6-instruct\\chatgpt-web-api\\output\\image_1787626452.png"
+      "url": "file:///C:/path/to/output/image_xxx.png",
+      "local_path": "C:\\path\\to\\output\\image_xxx.png"
     }
   ]
 }
@@ -440,7 +440,7 @@ Authorization: Bearer local-dev-key
 $env:CHATGPT_API_HOST = "0.0.0.0"
 $env:CHATGPT_API_KEY = "local-dev-key"
 $env:CHATGPT_BROWSER = "chrome"
-cd E:\aippt\gpt-5.6-instruct\chatgpt-web-api
+cd C:\path\to\chatgpt-web-api
 python -m app.main
 ```
 

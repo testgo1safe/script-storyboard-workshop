@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Stop"
-Set-Location "E:\aippt\gpt-5.6-instruct\chatgpt-web-api"
+Set-Location "C:\path\to\chatgpt-web-api"
 $env:CHATGPT_BROWSER = "chrome"
 $env:CHATGPT_API_KEY = "local-dev-key"
 

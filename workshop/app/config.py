@@ -11,8 +11,8 @@ WEB_DIR = ROOT_DIR / "web"
 VIDEO_ENV_CANDIDATES = (
     ROOT_DIR / ".env",
     ROOT_DIR / "video.env",
-    Path(r"E:\VIDeO") / ".env",
-    Path(r"E:\video") / ".env",
+    Path(r"C:\path\to\video") / ".env",
+    Path(r"C:\path\to\video2") / ".env",
     ROOT_DIR.parent / "VIDeO" / ".env",
     ROOT_DIR.parent / "video" / ".env",
 )
@@ -81,7 +81,7 @@ class Settings(BaseSettings):
 
 
 def _apply_video_keys(s: Settings, video: dict[str, str]) -> Settings:
-    """豆包配音：优先本目录 .env / video.env，没有再读 E:\\VIDeO\\.env。"""
+    """豆包配音：优先本目录 .env / video.env，没有再读视频环境目录下的 .env。"""
     if video.get("DOUBAO_API_KEY"):
         s.doubao_api_key = video["DOUBAO_API_KEY"]
     if video.get("DOUBAO_TTS_SPEAKER"):

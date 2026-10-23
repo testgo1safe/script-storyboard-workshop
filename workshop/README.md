@@ -5,7 +5,7 @@
 ## 能力
 
 1. **DeepSeek** 拆解剧本：人物、场景、道具、完整事件弧、按秒分镜（起始/过程/结果）。
-2. **本地 ChatGPT 出图服务**（`E:\aippt\gpt-5.6-instruct\chatgpt-web-api`）生成参考图。
+2. **本地 ChatGPT 出图服务**（`image-api`，安装路径以实际部署位置为准）生成参考图。
 3. 组装 **视频提示词**：参考图绑定、整体视觉、时间轴、表演动态、摄影连续性、声音、负面约束。
 
 ## 启动
@@ -25,7 +25,7 @@ DeepSeek Key 已写在 `.env`。若要换 Key，编辑该文件中的 `DEEPSEEK_
 参考图依赖本机已登录的 ChatGPT 出图 API：
 
 ```powershell
-cd E:\aippt\gpt-5.6-instruct\chatgpt-web-api
+cd C:\path\to\chatgpt-web-api
 python -m app.main
 ```
 
