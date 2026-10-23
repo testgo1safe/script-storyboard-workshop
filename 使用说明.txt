@@ -1,0 +1,28 @@
+剧本工坊便携包
+================
+
+换电脑用法
+1. 新电脑安装 Python 3.10 或更高（勾选 Add python.exe to PATH）
+2. 新电脑安装 Google Chrome（出图要用）
+3. 把整个文件夹拷过去，不要只拷里面一层
+4. 双击 start.bat（或「启动.bat」）
+5. 第一次会装依赖，等几分钟
+6. 弹出的 Chrome 窗口里登录 https://chatgpt.com ，保持这个窗口开着
+7. 浏览器打开 http://127.0.0.1:8000 即可用
+
+目录
+  start.bat / start.ps1  一键启动工坊 + 出图
+  stop.bat / stop.ps1    关掉本次拉起的服务
+  启动.bat / 停止.bat    同上（中文名）
+  workshop\              剧本工坊（含本机数据和 .env）
+  image-api\             本地 ChatGPT 出图服务
+  .venv\                 首次启动后自动生成，不要拷来拷去也没关系
+  logs\                  启动日志
+
+注意
+- 出图依赖已登录的 ChatGPT 网页，新电脑要重新登录一次
+- 密钥在 workshop\.env，不要发网盘公开分享
+- 配音密钥也在 workshop\.env（或 video.env）
+- 若只做分镜、暂不出图，界面勾选「跳过出图」
+- 不要用这次启动的调试 Chrome 当日常浏览器，以免关了出图中断
+

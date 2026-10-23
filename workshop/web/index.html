@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>剧本分镜工坊</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="mark">CF</span>
+        <div>
+          <h1>剧本分镜工坊</h1>
+          <p>剧本 · 分镜 · 出图 · 成片</p>
+        </div>
+      </div>
+      <ol class="pipeline" id="pipeline" aria-label="生产阶段">
+        <li data-step="script"><span>剧本</span></li>
+        <li data-step="storyboard"><span>分镜</span></li>
+        <li data-step="pictures"><span>参考图</span></li>
+        <li data-step="prompt"><span>提示词</span></li>
+        <li data-step="videos"><span>成片</span></li>
+      </ol>
+      <div class="health-strip" id="health">检测服务中…</div>
+    </header>
+
+    <div class="app-body">
+      <aside class="card sidebar">
+        <div class="card-head">
+          <h2>项目</h2>
+          <button type="button" class="btn ghost sm" id="new-project">新建</button>
+        </div>
+        <div class="side-list" id="project-list"></div>
+        <div class="roster hidden" id="series-roster"></div>
+      </aside>
+
+      <div class="workspace" id="workspace">
+        <section class="card script-panel" id="script-panel">
+          <div class="card-head">
+            <div>
+              <h2 id="form-title">本集剧本</h2>
+              <p class="context" id="context-line">请先在左侧新建或选择一个项目。</p>
+            </div>
+            <div class="head-actions">
+              <button type="button" class="btn ghost sm" id="fill-demo">示例</button>
+              <button type="button" class="btn ghost sm icon" id="collapse-script" title="收起">‹</button>
+            </div>
+          </div>
+          <div class="card-body scroll">
+            <textarea id="script" placeholder="粘贴本集剧本；勾选「整本拆多集」可贴完整剧本。"></textarea>
+            <div class="field-grid">
+              <label>
+                整集时长（秒）
+                <input type="number" id="duration" min="8" max="120" value="24" disabled />
+                <span class="inline-check"><input type="checkbox" id="duration-auto" checked /> 按剧情自动定</span>
+                <button type="button" class="btn ghost sm" id="estimate-duration">先估一估</button>
+                <small id="duration-hint">拆解时按节拍估算，一拍约 8–15 秒。</small>
+              </label>
+              <label>
+                视觉风格
+                <select id="style">
+                  <option>竖屏短剧 · 电影级写实</option>
+                  <option>电影级写实叙事</option>
+                  <option>电影级写实 · 冷暖对比</option>
+                  <option>纪录片观察风格</option>
+                  <option>日系清新电影</option>
+                  <option>水墨国风写实</option>
+                  <option>赛博朋克夜景</option>
+                  <option>动画电影质感</option>
+                </select>
+              </label>
+              <label>
+                画面比例
+                <select id="ratio">
+                  <option value="9:16">9:16 竖屏</option>
+                  <option value="16:9">16:9 横屏</option>
+                  <option value="3:4">3:4</option>
+                  <option value="1:1">1:1</option>
+                </select>
+              </label>
+              <label>
+                出片清晰度
+                <select id="resolution">
+                  <option value="480P">480P</option>
+                  <option value="768P">768P</option>
+                  <option value="1080P">1080P</option>
+                  <option value="2K">2K</option>
+                </select>
+              </label>
+              <label class="checks span-2">
+                生产选项
+                <span><input type="checkbox" id="skip-images" /> 跳过出图</span>
+                <span><input type="checkbox" id="high-quality" /> 高质量 Reasoner</span>
+                <span><input type="checkbox" id="auto-video" checked /> 分镜后自动出片</span>
+                <span><input type="checkbox" id="split-series" /> 整本拆多集</span>
+              </label>
+            </div>
+            <label>
+              本集标题（可选）
+              <input type="text" id="episode-title" placeholder="例如：末班站台" />
+              <small id="split-hint">有「第1集」标记时会自动按集拆开。</small>
+            </label>
+            <label>
+              补充要求
+              <input type="text" id="notes" placeholder="雨夜、不要路人、道具必须交接完整…" />
+            </label>
+            <button type="button" class="btn primary" id="start">生成本集分镜</button>
+            <div class="progress-wrap hidden" id="progress-wrap">
+              <div class="progress-bar"><i id="progress-bar"></i></div>
+              <div class="progress-meta">
+                <span id="progress-stage">queued</span>
+                <span id="progress-msg">准备中</span>
+              </div>
+              <ol class="log" id="log"></ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="card stage-panel result-panel">
+          <div class="card-head tabs-head">
+            <div class="tabs" role="tablist">
+              <button class="tab on" data-tab="shots" role="tab">分镜头</button>
+              <button class="tab" data-tab="pictures" role="tab">参考图</button>
+              <button class="tab" data-tab="prompt" role="tab">提示词</button>
+              <button class="tab" data-tab="videos" role="tab">成片</button>
+            </div>
+            <button type="button" class="btn ghost sm expand-script hidden" id="expand-script">展开剧本 ›</button>
+          </div>
+
+          <div class="card-body scroll tab-body on" id="tab-shots" role="tabpanel">
+            <div class="empty" id="shots-empty">选择已有剧集可回看，或新建剧集后生成分镜。</div>
+            <div id="shots-meta"></div>
+            <div class="shots" id="shots"></div>
+          </div>
+
+          <div class="card-body scroll tab-body" id="tab-pictures" role="tabpanel">
+            <div class="empty" id="pictures-empty">参考图会保存在项目里，同名角色和道具在后续剧集中沿用。</div>
+            <div class="meta-line" id="pictures-meta"></div>
+            <div class="pictures" id="pictures"></div>
+          </div>
+
+          <div class="card-body scroll tab-body" id="tab-prompt" role="tabpanel">
+            <div class="toolbar">
+              <span class="prompt-kind" id="prompt-label">分段提示词</span>
+              <button type="button" class="btn ghost sm" id="copy-prompt">复制全部</button>
+              <a class="btn ghost sm" id="download-zip" href="#">导出 ZIP</a>
+            </div>
+            <pre id="prompt">打开一集即可看到已保存的分段提示词（H3 / Seedance）。</pre>
+          </div>
+
+          <div class="card-body scroll tab-body" id="tab-videos" role="tabpanel">
+            <div class="toolbar video-toolbar">
+              <button type="button" class="btn ghost sm" id="generate-all">生成本集成片</button>
+              <button type="button" class="btn ghost sm" id="auto-edit">自动剪辑</button>
+              <button type="button" class="btn ghost sm" id="compile-series">合集剪辑</button>
+              <label class="inline-check">
+                引擎
+                <select id="video-provider">
+                  <option value="minimax">MiniMax H3</option>
+                  <option value="seedance">Seedance 2.0</option>
+                </select>
+              </label>
+              <label class="inline-check" id="seedance-model-wrap">
+                模型
+                <select id="seedance-model">
+                  <option value="seedance-2">标准版</option>
+                  <option value="seedance-2-fast" selected>Fast</option>
+                  <option value="seedance-2-mini">Mini</option>
+                </select>
+              </label>
+              <label class="inline-check">
+                清晰度
+                <select id="video-resolution">
+                  <option value="480P">480P</option>
+                  <option value="720P">720P</option>
+                  <option value="768P">768P</option>
+                  <option value="1080P">1080P</option>
+                </select>
+              </label>
+              <label class="inline-check"><input type="checkbox" id="edit-subs" /> 字幕</label>
+              <label class="inline-check"><input type="checkbox" id="edit-wipe" /> 去模型字幕</label>
+              <label class="inline-check"><input type="checkbox" id="edit-dub" /> 豆包配音</label>
+              <label class="inline-check"><input type="checkbox" id="edit-ambience" /> 后期环境音</label>
+            </div>
+            <div class="empty" id="videos-empty">分镜完成后按 4–15 秒切段出片，再自动拼接、配音、烧字幕。</div>
+            <div id="videos-meta"></div>
+            <div id="compile-player"></div>
+            <div id="edit-player"></div>
+            <div class="clips" id="clips"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="new-project-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-labelledby="new-project-title">
+      <h3 id="new-project-title">新建项目</h3>
+      <p class="modal-hint">为系列剧起一个名字，创建后即可编写第一集剧本。</p>
+      <label>
+        项目名称
+        <input type="text" id="new-project-name" autocomplete="off" maxlength="80" />
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost sm" id="new-project-cancel">取消</button>
+        <button type="button" class="btn primary sm" id="new-project-confirm">创建</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+

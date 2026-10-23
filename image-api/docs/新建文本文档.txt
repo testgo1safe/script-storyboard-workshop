@@ -1,0 +1,19 @@
+垫图功能
+在 POST /v1/images/generations 中，可通过以下三选一传入参考图：
+
+字段	说明
+reference_image_base64
+Base64 编码，支持 data:image/png;base64,... 或纯 Base64
+reference_image_url
+图片 URL，由服务端下载
+reference_image_path
+服务器本机路径（仅本机可访问）
+示例：
+
+curl http://172.26.11.2:8765/v1/images/generations \
+  -H "Authorization: Bearer local-dev-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "保持参考图中的人物姿势，改成赛博朋克风格",
+    "reference_image_base64": "data:image/png;base64,iVBORw0KGgo..."
+  }'
