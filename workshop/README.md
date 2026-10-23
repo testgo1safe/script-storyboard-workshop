@@ -11,7 +11,7 @@
 ## 启动
 
 ```powershell
-cd D:\chaifen
+cd C:\path\to\workshop
 python -m pip install -r requirements.txt
 python run.py
 ```
